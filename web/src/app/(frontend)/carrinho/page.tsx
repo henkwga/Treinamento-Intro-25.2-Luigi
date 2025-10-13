@@ -1,0 +1,199 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import SiteNavbar from "@/components/SiteNavbar";
+import { useAuth } from "@/hooks/auth";
+import raw from "@/data/albums.json";
+import { normalizeCoverPath } from "@/utils/image";
+
+type RawAlbum = {
+  id: string; title: string; artist?: string; price: number;
+  image: string; category: string; description?: string; weight?: number;
+};
+type Album = {
+  id: string; title: string; artist?: string; price: number;
+  cover: string; category: string;
+};
+
+type CartLine = { id: string; qty: number };
+type CartItem = Album & { qty: number; lineTotal: number };
+
+const LS_KEY = "cart";
+
+const ALL_ALBUMS: Album[] = (raw as RawAlbum[]).map(a => ({
+  id: a.id,
+  title: a.title,
+  artist: a.artist,
+  price: a.price,
+  cover: normalizeCoverPath(a.image),
+  category: a.category,
+}));
+
+const toBRL = (v: number) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+
+function readCart(): CartLine[] {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); }
+  catch { return []; }
+}
+function writeCart(lines: CartLine[]) {
+  localStorage.setItem(LS_KEY, JSON.stringify(lines));
+}
+
+export default function CartPage() {
+  const { user } = useAuth();
+  const [lines, setLines] = useState<CartLine[]>([]);
+
+  useEffect(() => {
+    setLines(readCart());
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === LS_KEY) setLines(readCart());
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  const items: CartItem[] = useMemo(() => {
+    const byId = new Map(ALL_ALBUMS.map(a => [a.id, a]));
+    return lines
+      .map(l => {
+        const a = byId.get(l.id);
+        if (!a) return null;
+        return { ...a, qty: l.qty, lineTotal: a.price * l.qty };
+      })
+      .filter(Boolean) as CartItem[];
+  }, [lines]);
+
+  const total = items.reduce((acc, it) => acc + it.lineTotal, 0);
+
+  function setQty(id: string, qty: number) {
+    if (qty < 1) return;
+    const next = lines.map(l => (l.id === id ? { ...l, qty } : l));
+    setLines(next); writeCart(next);
+  }
+  function inc(id: string) { setQty(id, (lines.find(l => l.id === id)?.qty || 0) + 1); }
+  function dec(id: string) { setQty(id, Math.max(1, (lines.find(l => l.id === id)?.qty || 1) - 1)); }
+  function removeLine(id: string) {
+    const next = lines.filter(l => l.id !== id);
+    setLines(next); writeCart(next);
+  }
+  function clearCart() { setLines([]); writeCart([]); }
+
+  function checkout() {
+    if (!items.length) return;
+    if (!user) {
+      alert("Faça login para finalizar a compra (clique em Entrar na barra superior).");
+      return;
+    }
+    alert(`Pedido confirmado! Total ${toBRL(total)}. Obrigado, ${user.name.split(" ")[0]}!`);
+    clearCart();
+  }
+
+  return (
+    <>
+      <SiteNavbar />
+
+      <main className="min-h-screen bg-[#0e0f11] pt-20 text-white">
+        <div className="mx-auto max-w-5xl px-4 pb-16">
+          <h1 className="mb-6 text-3xl font-extrabold tracking-wide text-[#ffd100]">Seu carrinho</h1>
+
+          {!items.length ? (
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
+              <p className="text-white/80">Seu carrinho está vazio.</p>
+              <a
+                href="/catalogo"
+                className="mt-4 inline-block rounded-full bg-[#ffd100] px-5 py-2 text-sm font-semibold text-black"
+              >
+                Explorar catálogo
+              </a>
+            </div>
+          ) : (
+            <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+              {/* Lista de itens */}
+              <div className="space-y-3">
+                {items.map((it) => (
+                  <div
+                    key={it.id}
+                    className="flex gap-4 rounded-xl border border-white/10 bg-[#181818]/60 p-3"
+                  >
+                    <img
+                      src={it.cover}
+                      alt={it.title}
+                      className="h-24 w-24 flex-none rounded-lg object-cover"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <h3 className="truncate text-sm font-semibold">{it.title}</h3>
+                      {it.artist && <p className="text-xs text-white/70">{it.artist}</p>}
+                      <div className="mt-3 flex items-center gap-2">
+                        <button
+                          onClick={() => dec(it.id)}
+                          className="h-8 w-8 rounded-full border border-white/10 bg-white/10 text-sm"
+                        >−</button>
+                        <input
+                          type="number"
+                          min={1}
+                          value={it.qty}
+                          onChange={(e) => setQty(it.id, Number(e.target.value))}
+                          className="w-14 rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-center text-sm outline-none"
+                        />
+                        <button
+                          onClick={() => inc(it.id)}
+                          className="h-8 w-8 rounded-full border border-white/10 bg-white/10 text-sm"
+                        >+</button>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end justify-between">
+                      <span className="rounded-full bg-[#ffd100] px-3 py-1 text-xs font-bold text-black">
+                        {toBRL(it.price)}
+                      </span>
+                      <button
+                        onClick={() => removeLine(it.id)}
+                        className="text-xs text-red-400 hover:underline"
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Resumo */}
+              <aside className="h-max rounded-2xl border border-white/10 bg-white/5 p-5">
+                <h2 className="mb-4 text-lg font-semibold">Resumo</h2>
+                <div className="mb-3 flex items-center justify-between text-sm">
+                  <span>Itens</span>
+                  <span>{items.length}</span>
+                </div>
+                <div className="mb-4 flex items-center justify-between text-sm">
+                  <span>Total</span>
+                  <span className="font-bold">{toBRL(total)}</span>
+                </div>
+
+                <button
+                  onClick={checkout}
+                  disabled={!items.length}
+                  className="mt-2 w-full rounded-full bg-[#ffd100] px-4 py-2 text-sm font-semibold text-black disabled:opacity-60"
+                >
+                  Finalizar compra
+                </button>
+
+                <button
+                  onClick={clearCart}
+                  className="mt-3 w-full rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm"
+                >
+                  Esvaziar carrinho
+                </button>
+
+                {!user && (
+                  <p className="mt-3 text-center text-xs text-white/70">
+                    Faça login pela barra superior para concluir o pedido.
+                  </p>
+                )}
+              </aside>
+            </div>
+          )}
+        </div>
+      </main>
+    </>
+  );
+}
