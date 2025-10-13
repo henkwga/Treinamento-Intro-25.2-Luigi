@@ -29,7 +29,6 @@ function emailOk(e: string) {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
 
-  // carrega sessão inicial
   useEffect(() => {
     try {
       const rawSess = localStorage.getItem(LS_SESSION);

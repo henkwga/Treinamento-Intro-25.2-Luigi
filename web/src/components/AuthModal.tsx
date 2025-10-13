@@ -7,11 +7,9 @@ export default function AuthModal({ open, onClose }: { open: boolean; onClose: (
   const [tab, setTab] = useState<"login" | "register">("login");
   const [msg, setMsg] = useState("");
 
-  // login
   const [lemail, setLEmail] = useState("");
   const [lpass, setLPass] = useState("");
 
-  // register
   const [rname, setRName] = useState("");
   const [remail, setREmail] = useState("");
   const [rpass, setRPass] = useState("");
@@ -44,7 +42,6 @@ export default function AuthModal({ open, onClose }: { open: boolean; onClose: (
         className="w-full max-w-md rounded-2xl border border-white/10 bg-[#151515] p-5 text-white shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Tabs */}
         <div className="mb-4 flex gap-2">
           <button
             className={`rounded-full px-4 py-2 text-sm ${tab === "login" ? "bg-white/10" : "bg-transparent hover:bg-white/5"} border border-white/10`}

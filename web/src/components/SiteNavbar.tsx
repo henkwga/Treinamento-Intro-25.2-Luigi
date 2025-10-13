@@ -6,7 +6,6 @@ import { useAuth } from "@/hooks/auth";
 import AuthModal from "@/components/AuthModal";
 
 export default function SiteNavbar() {
-  // hide on scroll
   const [hidden, setHidden] = useState(false);
   const last = useRef(0);
   useEffect(() => {

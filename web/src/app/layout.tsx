@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { AuthProvider } from "@/hooks/auth"; // <— adicione
+import { AuthProvider } from "@/hooks/auth";
 
 export const metadata: Metadata = {
   title: "DISCOSHOP",
