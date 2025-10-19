@@ -1,11 +1,20 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SiteNavbar from "@/components/SiteNavbar";
 import AlbumCard from "@/components/AlbumCard";
-import raw from "@/data/albums.json";
-import { normalizeCoverPath } from "@/utils/image";
+
+type ProdutoFromAPI = {
+  id: string;
+  nome: string;
+  descricao?: string | null;
+  preco: number;           // Float no schema
+  cover: string;
+  categorias?: Array<{
+    categoria: { id: string; nome: string; slug: string };
+  }>;
+};
 
 type Album = {
   id: string;
@@ -13,52 +22,68 @@ type Album = {
   artist?: string;
   price: number;
   cover: string;
-  category: string;
+  category: string;        // usaremos o slug da categoria
   weight?: number;
   description?: string;
 };
-
-type RawAlbum = {
-  id: string;
-  title: string;
-  artist?: string;
-  price: number;
-  image: string; 
-  category: string;
-  weight?: number;
-  description?: string;
-};
-
-const ALL_ALBUMS: Album[] = (raw as RawAlbum[]).map((a) => ({
-  id: a.id,
-  title: a.title,
-  artist: a.artist,
-  price: a.price,
-  cover: normalizeCoverPath(a.image),
-  category: a.category,
-  weight: a.weight,
-  description: a.description ?? "",
-}));
 
 export default function Catalogo() {
   const search = useSearchParams();
-  const initialCat = (search.get("cat") || "all").toLowerCase();
-  const [category, setCategory] = useState<string>(initialCat);
+  const router = useRouter();
+  const pathname = usePathname();
 
+  const [category, setCategory] = useState<string>(
+    (search.get("cat") || "all").toLowerCase()
+  );
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Mantém o estado sincronizado com a URL
   useEffect(() => {
-    const urlCat = (search.get("cat") || "all").toLowerCase();
-    setCategory(urlCat);
+    setCategory((search.get("cat") || "all").toLowerCase());
   }, [search]);
 
-  const cats = useMemo(
-    () => Array.from(new Set(ALL_ALBUMS.map((a) => a.category))).sort(),
-    []
-  );
+  // Busca produtos da API
+  useEffect(() => {
+    const url =
+      category === "all"
+        ? "/api/products"
+        : `/api/products?category=${encodeURIComponent(category)}`;
 
-  const filtered =
-    category === "all"
-      ? ALL_ALBUMS
-      : ALL_ALBUMS.filter((a) => a.category.toLowerCase() === category);
+    setLoading(true);
+    fetch(url, { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data: ProdutoFromAPI[]) => {
+        const mapped: Album[] = (data ?? []).map((p) => ({
+          id: p.id,
+          title: p.nome,
+          price: Number(p.preco ?? 0),
+          cover: p.cover,
+          // usa o slug da 1ª categoria (se existir)
+          category:
+            p.categorias?.[0]?.categoria?.slug ??
+            p.categorias?.[0]?.categoria?.nome?.toLowerCase() ??
+            "other",
+          description: p.descricao ?? "",
+        }));
+        setAlbums(mapped);
+      })
+      .finally(() => setLoading(false));
+  }, [category]);
+
+  // Deriva categorias (slugs) a partir dos produtos carregados
+  const cats = useMemo(() => {
+    const set = new Set<string>();
+    for (const a of albums) set.add(a.category);
+    return Array.from(set).sort();
+  }, [albums]);
+
+  // Atualiza estado + URL (?cat=...)
+  const handleCat = (c: string) => {
+    setCategory(c);
+    const qs = c === "all" ? "" : `?cat=${c}`;
+    router.replace(`${pathname}${qs}`);
+  };
 
   return (
     <>
@@ -77,7 +102,7 @@ export default function Catalogo() {
 
           <div className="mb-10 flex flex-wrap justify-center gap-2">
             <button
-              onClick={() => setCategory("all")}
+              onClick={() => handleCat("all")}
               className={`rounded-full border border-[#232323] px-4 py-1 text-sm ${
                 category === "all"
                   ? "bg-[#ffd100] text-black"
@@ -86,29 +111,31 @@ export default function Catalogo() {
             >
               Todos
             </button>
-            {cats.map((c) => {
-              const key = c.toLowerCase();
-              return (
-                <button
-                  key={c}
-                  onClick={() => setCategory(key)}
-                  className={`rounded-full border border-[#232323] px-4 py-1 text-sm capitalize ${
-                    category === key
-                      ? "bg-[#ffd100] text-black"
-                      : "bg-white/5 text-white hover:bg-white/10"
-                  }`}
-                >
-                  {c}
-                </button>
-              );
-            })}
-          </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {filtered.map((a) => (
-              <AlbumCard key={a.id} album={a} />
+            {cats.map((slug) => (
+              <button
+                key={slug}
+                onClick={() => handleCat(slug)}
+                className={`rounded-full border border-[#232323] px-4 py-1 text-sm capitalize ${
+                  category === slug
+                    ? "bg-[#ffd100] text-black"
+                    : "bg-white/5 text-white hover:bg-white/10"
+                }`}
+              >
+                {slug.replace(/-/g, " ")}
+              </button>
             ))}
           </div>
+
+          {loading ? (
+            <p className="text-center text-gray-400">Carregando...</p>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {albums.map((a) => (
+                <AlbumCard key={a.id} album={a} />
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </>
