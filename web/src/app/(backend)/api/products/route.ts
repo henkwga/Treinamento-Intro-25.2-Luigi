@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@/generated/prisma"; // <- types
+import type { Prisma } from "@/generated/prisma";
 
 export async function GET(req: NextRequest) {
   const category = req.nextUrl.searchParams.get("category");
