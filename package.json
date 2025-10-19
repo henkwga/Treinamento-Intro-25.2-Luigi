@@ -9,7 +9,10 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-        "@prisma/client"
+      "@prisma/client"
     ]
+  },
+  "dependencies": {
+    "mongodb": "^6.20.0"
   }
 }

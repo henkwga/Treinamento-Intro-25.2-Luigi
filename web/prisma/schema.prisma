@@ -32,56 +32,38 @@ model User {
   @@map("user")
 }
 
-model Curso {
-  id        String @id @default(uuid()) @map("_id")
-  name      String
-  descricao String
-  slug      String @unique
+model Produto {
+  id          String    @id @default(uuid()) @map("_id")
+  nome        String
+  descricao   String?
+  preco       Float
+  cover       String
+  categoryRaw String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  materiasRelacionadas CursoMateriaRelacionada[]
+  categorias  ProdutoCategoria[]
 }
 
-model CursoMateriaRelacionada {
-  id String @id @default(uuid()) @map("_id")
 
-  curso   Curso  @relation(fields: [cursoId], references: [id])
-  cursoId String
-
-  materia   Materia @relation(fields: [materiaId], references: [id])
-  materiaId String
-
-  @@unique([cursoId, materiaId])
-}
-
-model Materia {
-  id                 String                    @id @default(uuid()) @map("_id")
-  name               String
-  descricao          String
-  cor                String
-  slug               String                    @unique
-  cursosRelacionados CursoMateriaRelacionada[]
-}
-
-model Licao {
+model Categoria {
   id        String   @id @default(uuid()) @map("_id")
-  name      String
-  descricao String
-  archived  Boolean? @default(false)
+  nome      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
 
-  conteudo     Conteudo[]
+  produtos  ProdutoCategoria[]
 }
 
-model Conteudo {
-  id       String   @id @default(uuid()) @map("_id")
-  name     String
-  type     String
-  markdown String
-  order    Int      @default(0)
-  archived Boolean? @default(false)
-
-  licao   Licao?  @relation(fields: [licaoId], references: [id])
-  licaoId String?
+model ProdutoCategoria {
+  id          String   @id @default(uuid()) @map("_id")
+  produtoId   String
+  categoriaId String
+  produto     Produto   @relation(fields: [produtoId], references: [id])
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  @@unique([produtoId, categoriaId]) // necessário para o where do upsert
 }
+
 
 // evitar mexer daqui pra baixo:
 model Session {
