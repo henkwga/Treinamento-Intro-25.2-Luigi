@@ -38,17 +38,22 @@ export default function SiteNavbar() {
           </Link>
 
           <div className="hidden gap-7 text-sm text-[#c7c7c7] sm:flex">
-            <Link href="/catalogo" className="hover:text-[#a7a7a7]">Catálogo</Link>
+            <Link href="/catalogo" className="hover:text-[#a7a7a7]">
+              Catálogo
+            </Link>
           </div>
 
           <div className="flex items-center gap-2">
             {user ? (
               <>
-                <span className="hidden text-sm text-[#c7c7c7] sm:inline">
+                <Link
+                  href="/conta/perfil"
+                  className="hidden text-sm text-[#c7c7c7] hover:underline sm:inline"
+                  title="Ver meu perfil"
+                >
                   Olá, {user.name.split(" ")[0]}
-                </span>
+                </Link>
 
-                {/* 🔸 Botão de Meus Pedidos */}
                 <Link
                   href="/conta/pedidos"
                   className="rounded-full border border-[#232323] bg-white/5 px-4 py-2 text-sm text-white hover:bg-white/10"
@@ -56,7 +61,6 @@ export default function SiteNavbar() {
                   Meus pedidos
                 </Link>
 
-                {/* Botão de Carrinho */}
                 <Link
                   href="/carrinho"
                   className="rounded-full border border-[#232323] bg-white/5 px-4 py-2 text-sm text-white hover:bg-white/10"
@@ -64,7 +68,6 @@ export default function SiteNavbar() {
                   Carrinho
                 </Link>
 
-                {/* Logout */}
                 <button
                   onClick={logout}
                   className="rounded-full bg-[#ffd100] px-4 py-2 text-sm font-semibold text-black"
@@ -74,7 +77,6 @@ export default function SiteNavbar() {
               </>
             ) : (
               <>
-                {/* Carrinho para visitantes */}
                 <Link
                   href="/carrinho"
                   className="rounded-full border border-[#232323] bg-white/5 px-4 py-2 text-sm text-white hover:bg-white/10"
@@ -82,7 +84,6 @@ export default function SiteNavbar() {
                   Carrinho
                 </Link>
 
-                {/* Login */}
                 <button
                   onClick={() => setAuthOpen(true)}
                   className="rounded-full bg-[#ffd100] px-4 py-2 text-sm font-semibold text-black"
