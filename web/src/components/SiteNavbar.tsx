@@ -46,13 +46,9 @@ export default function SiteNavbar() {
           <div className="flex items-center gap-2">
             {user ? (
               <>
-                <Link
-                  href="/conta/perfil"
-                  className="hidden text-sm text-[#c7c7c7] hover:underline sm:inline"
-                  title="Ver meu perfil"
-                >
+
                   Olá, {user.name.split(" ")[0]}
-                </Link>
+
 
                 <Link
                   href="/conta/pedidos"
