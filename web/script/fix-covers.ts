@@ -6,19 +6,26 @@ import { normalizeCoverPath } from "@/utils/image";
 const prisma = new PrismaClient();
 
 async function main() {
-  const produtos = await prisma.produto.findMany({ select: { id: true, cover: true } });
+  const produtos = await prisma.produto.findMany({
+    select: { id: true, cover: true },
+  });
 
-  const updates = produtos
-    .map(p => {
-      const fixed = normalizeCoverPath(p.cover);
-      if (fixed !== p.cover) {
-        return prisma.produto.update({ where: { id: p.id }, data: { cover: fixed } });
-      }
-      return null;
-    })
-    .filter(Boolean) as any[];
+  const updates = produtos.flatMap((p) => {
+    if (!p.cover) return [];
 
-  if (!updates.length) {
+    const fixed = normalizeCoverPath(p.cover);
+    if (fixed !== p.cover) {
+      return [
+        prisma.produto.update({
+          where: { id: p.id },
+          data: { cover: fixed },
+        }),
+      ];
+    }
+    return [];
+  });
+
+  if (updates.length === 0) {
     console.log("Nada para atualizar.");
     return;
   }
@@ -28,5 +35,10 @@ async function main() {
 }
 
 main()
-  .catch(e => { console.error(e); process.exit(1); })
-  .finally(async () => { await prisma.$disconnect(); });
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
