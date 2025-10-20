@@ -1,0 +1,342 @@
+[
+   {
+    "id": "1",
+    "title": "Bocanada",
+    "artist": "Gustavo Cerati",
+    "price": 199,
+    "image": "/albuns/gustavo_cerati-bocanada.jpg",
+    "category": "rock",
+    "weight": 90,
+    "description": ""
+  },
+  {
+    "id": "2",
+    "title": "It Won't Always Be Like This",
+    "artist": "Inhaler",
+    "price": 169.0,
+    "image": "assets/imgs/albuns/inhaler - it won't always be like this.jpg",
+    "category": "indie",
+    "weight": 85,
+    "description":""
+  },
+  {
+    "id": "3",
+    "title": "Minas",
+    "artist": "Milton Nascimento",
+    "price": 420.0,
+    "image": "assets/imgs/albuns/milton nascimento - minas.jpg",
+    "category": "mpb",
+    "weight": 80,
+    "description":""
+  },
+  {
+    "id": "4",
+    "title": "The Name Of This Band Is Talking Heads",
+    "artist": "Talking Heads",
+    "price": 159.0,
+    "image": "assets/imgs/albuns/talking heads - the name of this band is talking heads.jpg",
+    "category": "rock",
+    "weight": 75,
+    "description":""
+  },
+  {
+    "id": "5",
+    "title": "When We Were Friends",
+    "artist": "The Backseat Lovers",
+    "price": 179.0,
+    "image": "assets/imgs/albuns/the backseat lovers - when we were friends.jpg",
+    "category": "indie",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "6",
+    "title": "In Rainbows",
+    "artist": "Radiohead",
+    "price": 470.0,
+    "image": "assets/imgs/albuns/in rainbows - radiohead.png",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "7",
+    "title": "Noel Gallagher's High Flying Birds",
+    "artist": "Noel Gallagher's High Flying Birds.jpg",
+    "price": 240.0,
+    "image": "assets/imgs/albuns/Noel Gallagher's High Flying Birds - Noel Gallagher's High Flying Birds.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "8",
+    "title": "(What's The Story) Morning Glory",
+    "artist": "Oasis",
+    "price": 320.0,
+    "image": "assets/imgs/albuns/oasis - (what's the story) morning glory.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "9",
+    "title": "Heathen Chemistry",
+    "artist": "Oasis",
+    "price": 300.0,
+    "image": "assets/imgs/albuns/oasis - heathen chemistry.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "10",
+    "title": "Ok Computer",
+    "artist": "Radiohead",
+    "price": 480.0,
+    "image": "assets/imgs/albuns/ok computer - radiohead.png",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "11",
+    "title": "I Should Coco",
+    "artist": "Supergrass",
+    "price": 170.0,
+    "image": "assets/imgs/albuns/supergrass - i should coco.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "12",
+    "title": "The Bends",
+    "artist": "Radiohead",
+    "price": 251.0,
+    "image": "assets/imgs/albuns/the bends - radiohead.png",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "13",
+    "title": "Disintegration",
+    "artist": "The Cure",
+    "price": 302.0,
+    "image": "assets/imgs/albuns/the cure - disintegration.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "14",
+    "title": "Kiss Me Kiss Me Kiss Me",
+    "artist": "The Cure",
+    "price": 270.0,
+    "image": "assets/imgs/albuns/the cure - kiss me kiss me kiss me.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "15",
+    "title": "Is This It",
+    "artist": "The Strokes",
+    "price": 400.0,
+    "image": "assets/imgs/albuns/the strokes - is this it.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "16",
+    "title": "Room On Fire",
+    "artist": "The Backseat Lovers",
+    "price": 380.0,
+    "image": "assets/imgs/albuns/the strokes - Room On Fire.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "17",
+    "title": "The New Abnormal",
+    "artist": "The Strokes",
+    "price": 570.0,
+    "image": "assets/imgs/albuns/the strokes - the new abnormal.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "18",
+    "title": "Weezer",
+    "artist": "Weezer",
+    "price": 200.0,
+    "image": "assets/imgs/albuns/weezer - weezer.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "19",
+    "title": "Cuban Soul: 18 Kilates",
+    "artist": "Cassiano",
+    "price": 500.0,
+    "image": "assets/imgs/albuns/cassiano - Cuban Soul.jpg",
+    "category": "mpb",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "20",
+    "title": "Belchior Ou Era Uma Vez Um Homem E Seu Tempo",
+    "artist": "Belchior",
+    "price": 620.0,
+    "image": "assets/imgs/albuns/belchior - belchior ou era uma vez um homem e seu tempo.jpg",
+    "category": "mpb",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "21",
+    "title": "O Poeta e o Violão",
+    "artist": "Toquinho e Vinicius",
+    "price": 430.0,
+    "image": "assets/imgs/albuns/Toquinho e Vinicius - O Poeta e o Violão.jpg",
+    "category": "mpb",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "22",
+    "title": "Maravilhas Contemporâneas",
+    "artist": "Luiz Melodia",
+    "price": 700.0,
+    "image": "assets/imgs/albuns/Luiz Melodia - Maravilhas Contemporâneas.jpg",
+    "category": "mpb",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "23",
+    "title": "The Queen Is Dead",
+    "artist": "The Smiths",
+    "price": 400.0,
+    "image": "assets/imgs/albuns/The Smiths - The Queen Is Dead.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "24",
+    "title": "X&Y",
+    "artist": "Coldplay",
+    "price": 520.0,
+    "image": "assets/imgs/albuns/Coldplay - X&Y.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "25",
+    "title": "Graduation",
+    "artist": "Kanye West",
+    "price": 300.0,
+    "image": "assets/imgs/albuns/Kanye West - Graduation.jpg",
+    "category": "hip-hop",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "26",
+    "title": "Late Registration",
+    "artist": "Kanye West",
+    "price": 600.0,
+    "image": "assets/imgs/albuns/Kanye West - Late Registration.jpg",
+    "category": "hip-hop",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "27",
+    "title": "Mr. Morale & The Big Steppers",
+    "artist": "Kendrick Lamar",
+    "price": 1000.0,
+    "image": "assets/imgs/albuns/Kendrick Lamar - Mr. Morale & The Big Steppers.jpg",
+    "category": "hip-hop",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "28",
+    "title": "Blond",
+    "artist": "Frank Ocean",
+    "price": 230.0,
+    "image": "assets/imgs/albuns/Frank Ocean - Blond.jpg",
+    "category": "hip-hop",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "29",
+    "title": "Strangers In The Night",
+    "artist": "Frank Sinatra",
+    "price": 230.0,
+    "image": "assets/imgs/albuns/Frank Sinatra - Strangers In The Night.jpg",
+    "category": "jazz",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "30",
+    "title": "Cycles",
+    "artist": "Frank Sinatra",
+    "price": 230.0,
+    "image": "assets/imgs/albuns/Frank Sinatra - Cycles.jpg",
+    "category": "jazz",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "31",
+    "title": "The Stone Roses",
+    "artist": "The Stone Roses",
+    "price": 9999.0,
+    "image": "assets/imgs/albuns/The Stone Roses - The Stone Roses.jpg",
+    "category": "rock",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "32",
+    "title": "What's Going On",
+    "artist": "Marvin Gaye",
+    "price": 1600.0,
+    "image": "assets/imgs/albuns/Marvin Gaye - What's Going On.jpg",
+    "category": "jazz",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "33",
+    "title": "Let's Get It On",
+    "artist": "Marvin Gaye",
+    "price": 500.0,
+    "image": "assets/imgs/albuns/Marvin Gaye - Let's Get It On.jpg",
+    "category": "jazz",
+    "weight": 70,
+    "description":""
+  },
+  {
+    "id": "34",
+    "title": "Here, My Dear",
+    "artist": "Marvin Gaye",
+    "price": 1200.0,
+    "image": "assets/imgs/albuns/Marvin Gaye - Here, My Dear.jpg",
+    "category": "jazz",
+    "weight": 70,
+    "description":""
+  }
+]

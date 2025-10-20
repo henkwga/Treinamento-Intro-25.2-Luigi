@@ -14,76 +14,81 @@ enum Role {
   SUPER_ADMIN
 }
 
+enum StatusCompra {
+  PENDENTE
+  PAGO
+  ENVIADO
+  CANCELADO
+}
+
 model User {
   // nao mexer >
-  id            String    @id @default(uuid()) @map("_id")
+  id            String   @id @default(uuid()) @map("_id")
   name          String
-  email         String    @unique
+  email         String   @unique
   emailVerified Boolean?
   image         String?
-  role          Role      @default(USER)
-  // < nao mexer 
+  role          Role     @default(USER)
+  // < nao mexer
 
-  createdAt  DateTime
-  updatedAt  DateTime
-  sessions   Session[]
-  accounts   Account[]
+  createdAt DateTime
+  updatedAt DateTime
+  sessions  Session[]
+  accounts  Account[]
 
   @@map("user")
 }
 
-model Curso {
-  id        String @id @default(uuid()) @map("_id")
-  name      String
-  descricao String
-  slug      String @unique
-
-  materiasRelacionadas CursoMateriaRelacionada[]
+model Produto {
+  id          String             @id @default(uuid()) @map("_id")
+  nome        String
+  descricao   String?
+  preco       Float
+  cover       String
+  categoryRaw String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  categorias  ProdutoCategoria[]
+  itens       CompraItem[]
 }
 
-model CursoMateriaRelacionada {
-  id String @id @default(uuid()) @map("_id")
-
-  curso   Curso  @relation(fields: [cursoId], references: [id])
-  cursoId String
-
-  materia   Materia @relation(fields: [materiaId], references: [id])
-  materiaId String
-
-  @@unique([cursoId, materiaId])
+model Categoria {
+  id        String             @id @default(uuid()) @map("_id")
+  nome      String             @unique
+  slug      String             @unique
+  createdAt DateTime           @default(now())
+  produtos  ProdutoCategoria[]
 }
 
-model Materia {
-  id                 String                    @id @default(uuid()) @map("_id")
-  name               String
-  descricao          String
-  cor                String
-  slug               String                    @unique
-  cursosRelacionados CursoMateriaRelacionada[]
+model ProdutoCategoria {
+  id          String    @id @default(uuid()) @map("_id")
+  produtoId   String
+  categoriaId String
+  produto     Produto   @relation(fields: [produtoId], references: [id])
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+
+  @@unique([produtoId, categoriaId])
 }
 
-model Licao {
-  id        String   @id @default(uuid()) @map("_id")
-  name      String
-  descricao String
-  archived  Boolean? @default(false)
-
-  conteudo     Conteudo[]
+model Compra {
+  id         String       @id @default(uuid()) @map("_id")
+  userId     String
+  status     StatusCompra @default(PENDENTE)
+  precoTotal Float
+  createdAt  DateTime     @default(now())
+  itens      CompraItem[]
 }
 
-model Conteudo {
-  id       String   @id @default(uuid()) @map("_id")
-  name     String
-  type     String
-  markdown String
-  order    Int      @default(0)
-  archived Boolean? @default(false)
-
-  licao   Licao?  @relation(fields: [licaoId], references: [id])
-  licaoId String?
+model CompraItem {
+  id         String  @id @default(uuid()) @map("_id")
+  compraId   String
+  produtoId  String
+  quantidade Int
+  precoUnit  Float
+  compra     Compra  @relation(fields: [compraId], references: [id])
+  produto    Produto @relation(fields: [produtoId], references: [id])
 }
 
-// evitar mexer daqui pra baixo:
 model Session {
   id        String   @id @map("_id")
   expiresAt DateTime
