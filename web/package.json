@@ -13,6 +13,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "fix:covers": "tsx ./script/fix-covers.ts",
     "postinstall": "prisma generate",
 
     "seed": "tsx ./script/seed.ts"
