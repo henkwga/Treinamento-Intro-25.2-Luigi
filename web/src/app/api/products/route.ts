@@ -35,31 +35,49 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const body = await req.json().catch(() => null);
+  if (!body) return NextResponse.json({ message: "Body ausente ou JSON inválido" }, { status: 400 });
+
   const parsed = productCreateSchema.safeParse(body);
-  if (!parsed.success) {
-    return badRequest(toIssues(parsed.error));
-  }
+  if (!parsed.success) return badRequest(toIssues(parsed.error));
 
   const { nome, descricao, preco, cover, categoriaIds } = parsed.data;
 
-  const created = await prisma.produto.create({
-    data: {
-      nome,
-      descricao,
-      preco,
-      cover,
-      categorias:
-        Array.isArray(categoriaIds) && categoriaIds.length
-          ? {
-              create: categoriaIds.map((id: string) => ({
-                categoria: { connect: { id } },
-              })),
-            }
-          : undefined,
-    },
-    include: { categorias: { include: { categoria: true } } },
+  const exists = await prisma.produto.findFirst({
+    where: { nome: { equals: nome, mode: "insensitive" } },
+    select: { id: true },
   });
+  if (exists) {
+    return NextResponse.json(
+      { message: "Produto já existe com esse nome" },
+      { status: 409 }
+    );
+  }
 
-  return NextResponse.json(created, { status: 201 });
+  try {
+    const created = await prisma.produto.create({
+      data: {
+        nome,
+        descricao: descricao ?? null,
+        preco,
+        cover,
+        categorias:
+          Array.isArray(categoriaIds) && categoriaIds.length
+            ? {
+                create: categoriaIds.map((id: string) => ({
+                  categoria: { connect: { id } },
+                })),
+              }
+            : undefined,
+      },
+      include: { categorias: { include: { categoria: true } } },
+    });
+    return NextResponse.json(created, { status: 201 });
+  } catch (err) {
+    console.error("POST /api/products error:", err);
+    return NextResponse.json({ message: "Erro interno ao criar produto" }, { status: 500 });
+  }
 }
+
+
+
