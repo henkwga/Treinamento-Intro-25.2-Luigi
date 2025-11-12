@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   const compra = await prisma.compra.create({
     data: {
       userId,
-      status: "PENDENTE",
+      status: "pending",
       precoTotal: total,
       itens: { create: itensCreate },
     },

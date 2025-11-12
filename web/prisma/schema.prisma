@@ -15,10 +15,13 @@ enum Role {
 }
 
 enum StatusCompra {
-  PENDENTE
-  PAGO
-  ENVIADO
-  CANCELADO
+  pending    @map("PENDENTE")
+  paid       @map("PAGO")
+  shipped    @map("ENVIADO")
+  delivered  @map("ENTREGUE")
+  cancelled  @map("CANCELADO")
+
+  @@map("StatusCompra")
 }
 
 model User {
@@ -73,7 +76,7 @@ model ProdutoCategoria {
 model Compra {
   id         String       @id @default(uuid()) @map("_id")
   userId     String
-  status     StatusCompra @default(PENDENTE)
+  status     StatusCompra @default(pending)
   precoTotal Float
   createdAt  DateTime     @default(now())
   itens      CompraItem[]
