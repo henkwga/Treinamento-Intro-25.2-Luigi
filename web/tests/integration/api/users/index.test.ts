@@ -12,7 +12,7 @@ vi.mock('@/auth', () => ({
   auth: vi.fn()
 }))
 
-import { POST } from '@/backend/api/users/route'
+import { POST } from '@/app/api/users/route'
 
 describe('POST /api/users', () => {
   beforeEach(() => {
